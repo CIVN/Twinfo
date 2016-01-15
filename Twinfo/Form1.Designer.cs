@@ -44,7 +44,6 @@
 			// 
 			// webBrowser1
 			// 
-			this.webBrowser1.Dock = System.Windows.Forms.DockStyle.Right;
 			this.webBrowser1.Location = new System.Drawing.Point(234, 0);
 			this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
 			this.webBrowser1.Name = "webBrowser1";
@@ -117,7 +116,6 @@
 			this.comboBox1.FormattingEnabled = true;
 			this.comboBox1.Items.AddRange(new object[] {
             "name",
-            "id",
             "follow",
             "follower",
             "description"});
@@ -175,6 +173,9 @@
 			this.Controls.Add(this.webBrowser1);
 			this.DoubleBuffered = true;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.MaximizeBox = false;
+			this.MaximumSize = new System.Drawing.Size(800, 500);
+			this.MinimumSize = new System.Drawing.Size(800, 500);
 			this.Name = "Form1";
 			this.Text = "Twinfo";
 			this.Load += new System.EventHandler(this.Form1_Load);

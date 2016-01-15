@@ -31,9 +31,73 @@ namespace Twinfo
 		private Uri hp = new Uri("http://civn.blog.jp/");
 		private Uri url;
 
+		private String query;
+
 		public Form1()
 		{
 			InitializeComponent();
+		}
+
+		public void Auth()
+		{
+			Properties.Settings.Default.Reload();
+
+			String url = webBrowser1.Url.ToString();
+
+			if (url.Contains("oauth_token") && url.Contains("oauth_verifier"))
+			{
+				if (url.Contains("civn.blog.jp"))
+				{
+					String oauth_token;
+					String oauth_verifier;
+
+					//クエリからoauth_tokenを抽出
+					try
+					{
+						oauth_token = query.Substring(13, 27);
+					}
+
+					catch
+					{
+						return;
+					}
+
+					//クエリからoauth_verifierを抽出
+					try
+					{
+						oauth_verifier = query.Substring(56);
+					}
+
+					catch
+					{
+						return;
+					}
+
+					webBrowser1.Url = hp;
+
+					//トークンを作成
+					try
+					{
+						token = session.GetTokens(oauth_verifier);
+					}
+
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						return;
+					}
+
+					Properties.Settings.Default.AccessToken = token.AccessToken;
+					Properties.Settings.Default.AccessTokenSecret = token.AccessTokenSecret;
+					Properties.Settings.Default.ScreenName = token.ScreenName;
+					Properties.Settings.Default.UserID = token.UserId;
+					Properties.Settings.Default.Save();
+
+					richTextBox1.AppendText("\nアカウントの認証に成功しました！");
+					richTextBox1.AppendText("\nName: " + token.Statuses.UserTimeline(token.ScreenName)[0].User.Name);
+					richTextBox1.AppendText("\nID: @" + token.ScreenName);
+				}
+			}
 		}
 
 		public void OK()
@@ -164,77 +228,19 @@ namespace Twinfo
 
 		private void webBrowser1_Navigated(object sender, WebBrowserNavigatedEventArgs e)
 		{
-			Properties.Settings.Default.Reload();
-
-			String url = webBrowser1.Url.ToString();
-
-			if (url.Contains("oauth_token") && url.Contains("oauth_verifier"))
+			//URLからクエリを取得
+			try
 			{
-				if (url.Contains("civn.blog.jp"))
-				{
-					String query;
-					String oauth_token;
-					String oauth_verifier;
-
-					//URLからクエリを取得
-					try
-					{
-						query = e.Url.Query;
-					}
-
-					catch (Exception ex)
-					{
-						MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
-						return;
-					}
-
-					//クエリからoauth_tokenを抽出
-					try
-					{
-						oauth_token = query.Substring(13, 27);
-					}
-
-					catch
-					{
-						return;
-					}
-
-					//クエリからoauth_verifierを抽出
-					try
-					{
-						oauth_verifier = query.Substring(56);
-					}
-
-					catch
-					{
-						return;
-					}
-
-					webBrowser1.Url = hp;
-
-					//トークンを作成
-					try
-					{
-						token = session.GetTokens(oauth_verifier);
-					}
-
-					catch (Exception ex)
-					{
-						MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
-						return;
-					}
-
-					Properties.Settings.Default.AccessToken = token.AccessToken;
-					Properties.Settings.Default.AccessTokenSecret = token.AccessTokenSecret;
-					Properties.Settings.Default.ScreenName = token.ScreenName;
-					Properties.Settings.Default.UserID = token.UserId;
-					Properties.Settings.Default.Save();
-
-					richTextBox1.AppendText("\nアカウントの認証に成功しました！");
-					richTextBox1.AppendText("\nName: " + token.Statuses.UserTimeline(token.ScreenName)[0].User.Name);
-					richTextBox1.AppendText("\nID: @" + token.ScreenName);
-				}
+				query = e.Url.Query;
 			}
+
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				return;
+			}
+
+			Auth();
 		}
 
 		private void button1_Click(object sender, EventArgs e)

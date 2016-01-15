@@ -1,0 +1,12 @@
+c:\users\vn\documents\visual studio 2015\Projects\Twinfo\Twinfo\bin\Release\Twinfo.exe.config
+c:\users\vn\documents\visual studio 2015\Projects\Twinfo\Twinfo\bin\Release\Twinfo.exe
+c:\users\vn\documents\visual studio 2015\Projects\Twinfo\Twinfo\bin\Release\Twinfo.pdb
+c:\users\vn\documents\visual studio 2015\Projects\Twinfo\Twinfo\bin\Release\CoreTweet.dll
+c:\users\vn\documents\visual studio 2015\Projects\Twinfo\Twinfo\bin\Release\Newtonsoft.Json.dll
+c:\users\vn\documents\visual studio 2015\Projects\Twinfo\Twinfo\bin\Release\CoreTweet.xml
+c:\users\vn\documents\visual studio 2015\Projects\Twinfo\Twinfo\bin\Release\Newtonsoft.Json.xml
+c:\users\vn\documents\visual studio 2015\Projects\Twinfo\Twinfo\obj\Release\Twinfo.Form1.resources
+c:\users\vn\documents\visual studio 2015\Projects\Twinfo\Twinfo\obj\Release\Twinfo.Properties.Resources.resources
+c:\users\vn\documents\visual studio 2015\Projects\Twinfo\Twinfo\obj\Release\Twinfo.csproj.GenerateResource.Cache
+c:\users\vn\documents\visual studio 2015\Projects\Twinfo\Twinfo\obj\Release\Twinfo.exe
+c:\users\vn\documents\visual studio 2015\Projects\Twinfo\Twinfo\obj\Release\Twinfo.pdb
