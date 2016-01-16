@@ -115,13 +115,23 @@
 			this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBox1.FormattingEnabled = true;
 			this.comboBox1.Items.AddRange(new object[] {
-            "name",
+            "created",
+            "description",
+            "favorite",
             "follow",
             "follower",
-            "description"});
+            "id",
+            "language",
+            "listed",
+            "location",
+            "name",
+            "timezone",
+            "tweet",
+            "url"});
 			this.comboBox1.Location = new System.Drawing.Point(12, 75);
 			this.comboBox1.Name = "comboBox1";
 			this.comboBox1.Size = new System.Drawing.Size(158, 20);
+			this.comboBox1.Sorted = true;
 			this.comboBox1.TabIndex = 9;
 			// 
 			// button2

@@ -10,3 +10,12 @@ c:\users\vn\documents\visual studio 2015\Projects\Twinfo\Twinfo\obj\Release\Twin
 c:\users\vn\documents\visual studio 2015\Projects\Twinfo\Twinfo\obj\Release\Twinfo.csproj.GenerateResource.Cache
 c:\users\vn\documents\visual studio 2015\Projects\Twinfo\Twinfo\obj\Release\Twinfo.exe
 c:\users\vn\documents\visual studio 2015\Projects\Twinfo\Twinfo\obj\Release\Twinfo.pdb
+c:\users\vn\documents\visual studio 2015\Projects\Twinfo\Twinfo\obj\Release\Twinfo.csprojResolveAssemblyReference.cache
+c:\users\vn\documents\visual studio 2015\Projects\Twinfo\Twinfo\bin\Release\cfaa3e7d36b61fa8fec79021d0924892_l.ico
+c:\users\vn\documents\visual studio 2015\Projects\Twinfo\Twinfo\bin\Release\Twinfo.exe.manifest
+c:\users\vn\documents\visual studio 2015\Projects\Twinfo\Twinfo\bin\Release\Twinfo.application
+c:\users\vn\documents\visual studio 2015\Projects\Twinfo\Twinfo\bin\Release\Twinfo.exe.CodeAnalysisLog.xml
+c:\users\vn\documents\visual studio 2015\Projects\Twinfo\Twinfo\bin\Release\Twinfo.exe.lastcodeanalysissucceeded
+c:\users\vn\documents\visual studio 2015\Projects\Twinfo\Twinfo\obj\Release\Twinfo.TrustInfo.xml
+c:\users\vn\documents\visual studio 2015\Projects\Twinfo\Twinfo\obj\Release\Twinfo.exe.manifest
+c:\users\vn\documents\visual studio 2015\Projects\Twinfo\Twinfo\obj\Release\Twinfo.application

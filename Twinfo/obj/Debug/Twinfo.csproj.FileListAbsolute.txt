@@ -11,3 +11,9 @@ c:\users\vn\documents\visual studio 2015\Projects\Twinfo\Twinfo\obj\Debug\Twinfo
 c:\users\vn\documents\visual studio 2015\Projects\Twinfo\Twinfo\obj\Debug\Twinfo.exe
 c:\users\vn\documents\visual studio 2015\Projects\Twinfo\Twinfo\obj\Debug\Twinfo.pdb
 c:\users\vn\documents\visual studio 2015\Projects\Twinfo\Twinfo\obj\Debug\Twinfo.Form1.resources
+c:\users\vn\documents\visual studio 2015\Projects\Twinfo\Twinfo\bin\Debug\cfaa3e7d36b61fa8fec79021d0924892_l.ico
+c:\users\vn\documents\visual studio 2015\Projects\Twinfo\Twinfo\bin\Debug\Twinfo.exe.manifest
+c:\users\vn\documents\visual studio 2015\Projects\Twinfo\Twinfo\bin\Debug\Twinfo.application
+c:\users\vn\documents\visual studio 2015\Projects\Twinfo\Twinfo\obj\Debug\Twinfo.TrustInfo.xml
+c:\users\vn\documents\visual studio 2015\Projects\Twinfo\Twinfo\obj\Debug\Twinfo.exe.manifest
+c:\users\vn\documents\visual studio 2015\Projects\Twinfo\Twinfo\obj\Debug\Twinfo.application

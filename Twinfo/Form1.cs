@@ -1,4 +1,6 @@
 ﻿using CoreTweet;
+using CoreTweet.Core;
+using CoreTweet.Rest;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -138,7 +140,7 @@ namespace Twinfo
 
 				try
 				{
-					name = token.Statuses.UserTimeline(id)[0].User.Name;
+					name = token.Users.Show(id).Name;
 				}
 
 				catch (Exception ex)
@@ -152,11 +154,11 @@ namespace Twinfo
 
 			else if (item == "follow")
 			{
-				IEnumerable<long> follow;
+				int follow;
 
 				try
 				{
-					follow = token.Friends.EnumerateIds(EnumerateMode.Next, id);
+					follow = token.Users.Show(id).FriendsCount;
 				}
 
 				catch (Exception ex)
@@ -165,16 +167,16 @@ namespace Twinfo
 					return;
 				}
 
-				richTextBox1.AppendText("\n@" + id + "'s Follow: " + follow.ToArray().Length);
+				richTextBox1.AppendText("\n@" + id + "'s Follow: " + follow);
 			}
 
 			else if (item == "follower")
 			{
-				IEnumerable<long> follower;
+				int follower;
 
 				try
 				{
-					follower = token.Followers.EnumerateIds(EnumerateMode.Next, id);
+					follower = token.Users.Show(id).FollowersCount;
 				}
 
 				catch (Exception ex)
@@ -183,7 +185,7 @@ namespace Twinfo
 					return;
 				}
 
-				richTextBox1.AppendText("\n@" + id + "'s Follower: " + follower.ToArray().Length);
+				richTextBox1.AppendText("\n@" + id + "'s Follower: " + follower);
 			}
 
 			else if (item == "description")
@@ -192,7 +194,7 @@ namespace Twinfo
 
 				try
 				{
-					description = token.Statuses.UserTimeline(id)[0].User.Description;
+					description = token.Users.Show(id).Description;
 				}
 
 				catch (Exception ex)
@@ -202,6 +204,168 @@ namespace Twinfo
 				}
 
 				richTextBox1.AppendText("\n@" + id + "'s Description: " + description);
+			}
+
+			else if (item == "id")
+			{
+				long id_number;
+
+				try
+				{
+					id_number = token.Users.Show(id).Id.Value;
+				}
+
+				catch (Exception ex)
+				{
+					MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					return;
+				}
+
+				richTextBox1.AppendText("\n@" + id + "'s ID: " + id_number);
+			}
+
+			else if (item == "timezone")
+			{
+				String timezone;
+
+				try
+				{
+					timezone = token.Users.Show(id).TimeZone;
+				}
+
+				catch (Exception ex)
+				{
+					MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					return;
+				}
+
+				richTextBox1.AppendText("\n@" + id + "'s TimeZone: " + timezone);
+			}
+
+			else if (item == "created")
+			{
+				String created;
+
+				try
+				{
+					created = token.Users.Show(id).CreatedAt.ToUniversalTime().ToString();
+				}
+
+				catch (Exception ex)
+				{
+					MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					return;
+				}
+
+				richTextBox1.AppendText("\n@" + id + "'s Created: " + created);
+			}
+
+			else if (item == "favorite")
+			{
+				int fav = 0;
+
+				try
+				{
+					fav = token.Users.Show(id).FavouritesCount;
+				}
+
+				catch (Exception ex)
+				{
+					MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					return;
+				}
+
+				richTextBox1.AppendText("\n@" + id + "'s Favorite: " + fav);
+			}
+
+			else if (item == "tweet")
+			{
+				int tweet;
+
+				try
+				{
+					tweet = token.Users.Show(id).StatusesCount;
+				}
+
+				catch (Exception ex)
+				{
+					MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					return;
+				}
+
+				richTextBox1.AppendText("\n@" + id + "'s Tweet: " + tweet);
+			}
+
+			else if (item == "language")
+			{
+				String language;
+
+				try
+				{
+					language = token.Users.Show(id).Language;
+				}
+
+				catch (Exception ex)
+				{
+					MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					return;
+				}
+
+				richTextBox1.AppendText("\n@" + id + "'s Language: " + language);
+			}
+
+			else if (item == "listed")
+			{
+				int listed;
+
+				try
+				{
+					listed = token.Users.Show(id).ListedCount.Value;
+				}
+
+				catch (Exception ex)
+				{
+					MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					return;
+				}
+
+				richTextBox1.AppendText("\n@" + id + "'s Listed: " + listed);
+			}
+
+			else if (item == "location")
+			{
+				String loc;
+
+				try
+				{
+					loc = token.Users.Show(id).Location;
+				}
+
+				catch (Exception ex)
+				{
+					MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					return;
+				}
+
+				richTextBox1.AppendText("\n@" + id + "'s Location: " + loc);
+			}
+
+			else if (item == "url")
+			{
+				String url;
+
+				try
+				{
+					url = token.Users.Show(id).Url;
+				}
+
+				catch (Exception ex)
+				{
+					MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					return;
+				}
+
+				richTextBox1.AppendText("\n@" + id + "'s URL: " + url);
 			}
 		}
 
@@ -282,7 +446,7 @@ namespace Twinfo
 			{
 				Properties.Settings.Default.Reload();
 				Properties.Settings.Default.Reset();
-				Application.Restart();
+				System.Windows.Forms.Application.Restart();
 			}
 		}
 
