@@ -17,43 +17,72 @@ namespace Twinfo
 {
 	public partial class Form1 : Form
 	{
-		public const String ConsumerKey = "TR9KNUJTuannhiLx4KZLoMMTC";
-		public const String ConsumerSecret = "PX5lTa6h3coG6PmGpVqVo33VnKaOUkfyjP1ugUu8hvWrSGKzfe";
-		public const String CallbackURL = "http://civn.blog.jp/callback/";
+		private const string ConsumerKey = "k4QkjYXYXNu2I9zbP3PkNUNgl";
+		private const string ConsumerSecret = "";
+		private const string CallbackURL = "http://civn.blog.jp/callback/";
 
-		public Tokens token;
-		public OAuthSession session = Authorize(ConsumerKey, ConsumerSecret, CallbackURL);
+		private Tokens token;
+		private OAuthSession session = Authorize(ConsumerKey, ConsumerSecret, CallbackURL);
 
-		private String AccessToken = Properties.Settings.Default.AccessToken;
-		private String AccessTokenSecret = Properties.Settings.Default.AccessTokenSecret;
+		private string AccessToken = Properties.Settings.Default.AccessToken;
+		private string AccessTokenSecret = Properties.Settings.Default.AccessTokenSecret;
 
-		private String ScreenName = Properties.Settings.Default.ScreenName;
+		private string ScreenName = Properties.Settings.Default.ScreenName;
 		private long UserID = Properties.Settings.Default.UserID;
 
 		private Uri hp = new Uri("http://civn.blog.jp/");
 		private Uri url;
 
-		private String query;
+		private string query;
+
+		private string id;
+		private string item;
+		private string result;
 
 		public Form1()
 		{
 			InitializeComponent();
 		}
 
-		public void Auth()
+		public void Result()
+		{
+			if (item == "BackgroundColor")
+			{
+				result = "#" + result;
+
+				Color color = ColorTranslator.FromHtml(result);
+
+				//反転色作成
+				int R = 255 - color.R;
+				int G = 255 - color.G;
+				int B = 255 - color.B;
+				int A = 255 - color.A;
+
+				Color xcolor = Color.FromArgb(A, R, G, B);
+
+				richTextBox1.BackColor = color;
+				richTextBox1.ForeColor = xcolor;
+			}
+
+			richTextBox1.AppendText("\n\n@" + id + "'s " + item + ":\n" + result);
+		}
+
+		//認証
+		private void Auth()
 		{
 			Properties.Settings.Default.Reload();
 
-			String url = webBrowser1.Url.ToString();
+			var url = webBrowser1.Url.ToString();
 
+			/*TODO: ここガバガバ*/
 			if (url.Contains("oauth_token") && url.Contains("oauth_verifier"))
 			{
-				if (url.Contains("civn.blog.jp"))
+				if (url.Contains("civn.blog.jp/callback/"))
 				{
-					String oauth_token;
-					String oauth_verifier;
+					string oauth_token;
+					string oauth_verifier;
 
-					//クエリからoauth_tokenを抽出
+					//クエリから色々抽出
 					try
 					{
 						oauth_token = query.Substring(13, 27);
@@ -64,7 +93,6 @@ namespace Twinfo
 						return;
 					}
 
-					//クエリからoauth_verifierを抽出
 					try
 					{
 						oauth_verifier = query.Substring(56);
@@ -77,7 +105,7 @@ namespace Twinfo
 
 					webBrowser1.Url = hp;
 
-					//トークンを作成
+					//トークン作成
 					try
 					{
 						token = session.GetTokens(oauth_verifier);
@@ -96,16 +124,17 @@ namespace Twinfo
 					Properties.Settings.Default.Save();
 
 					richTextBox1.AppendText("\nアカウントの認証に成功しました！");
-					richTextBox1.AppendText("\nName: " + token.Statuses.UserTimeline(token.ScreenName)[0].User.Name);
 					richTextBox1.AppendText("\nID: @" + token.ScreenName);
+
+					token.Statuses.Update("#UsingTwinfo");
 				}
 			}
 		}
 
-		public void OK()
+		//処理開始
+		private void OK()
 		{
-			String id;
-			String item = comboBox1.SelectedText;
+			item = comboBox1.SelectedItem.ToString();
 
 			if (token == null)
 			{
@@ -123,250 +152,295 @@ namespace Twinfo
 				id = textBox1.Text;
 			}
 
-			try
+			switch (item)
 			{
-				item = comboBox1.SelectedItem.ToString();
+				case "Name":
+
+					try
+					{
+						result = token.Users.Show(id).Name;
+					}
+
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						return;
+					}
+
+					break;
+
+				case "Follow":
+
+					try
+					{
+						result = token.Users.Show(id).FriendsCount.ToString();
+					}
+
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						return;
+					}
+
+					break;
+
+				case "Follower":
+
+					try
+					{
+						result = token.Users.Show(id).FollowersCount.ToString();
+					}
+
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						return;
+					}
+
+					break;
+
+				case "Description":
+
+					try
+					{
+						result = token.Users.Show(id).Description;
+					}
+
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						return;
+					}
+
+					break;
+
+				case "ID":
+
+					try
+					{
+						result = token.Users.Show(id).Id.Value.ToString();
+					}
+
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						return;
+					}
+
+					break;
+
+				case "TimeZone":
+
+					try
+					{
+						result = token.Users.Show(id).TimeZone;
+					}
+
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						return;
+					}
+
+					break;
+
+				case "Created":
+
+					try
+					{
+						result = token.Users.Show(id).CreatedAt.ToUniversalTime().ToString();
+					}
+
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						return;
+					}
+
+					break;
+
+				case "Favorite":
+
+					try
+					{
+						result = token.Users.Show(id).FavouritesCount.ToString();
+					}
+
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						return;
+					}
+
+					break;
+
+				case "Tweet":
+
+					try
+					{
+						result = token.Users.Show(id).StatusesCount.ToString();
+					}
+
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						return;
+					}
+
+					break;
+
+				case "Language":
+
+					try
+					{
+						result = token.Users.Show(id).Language;
+					}
+
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						return;
+					}
+
+					break;
+
+				case "Listed":
+
+					try
+					{
+						result = token.Users.Show(id).ListedCount.Value.ToString();
+					}
+
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						return;
+					}
+
+					break;
+
+				case "Location":
+
+					try
+					{
+						result = token.Users.Show(id).Location;
+					}
+
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						return;
+					}
+
+					break;
+
+				case "URL":
+
+					try
+					{
+						result = token.Users.Show(id).Url;
+					}
+
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						return;
+					}
+
+					break;
+
+				case "BackgroundColor":
+
+					try
+					{
+						result = token.Users.Show(id).ProfileBackgroundColor;
+					}
+
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						return;
+					}
+
+					break;
+
+				case "BackgroundImageUrl":
+
+					try
+					{
+						result = token.Users.Show(id).ProfileBackgroundImageUrl;
+					}
+
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						return;
+					}
+
+					break;
+
+				case "BackgroundImageUrlHttps":
+
+					try
+					{
+						result = token.Users.Show(id).ProfileBackgroundImageUrlHttps;
+					}
+
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						return;
+					}
+
+					break;
+
+				case "BannerUrl":
+
+					try
+					{
+						result = token.Users.Show(id).ProfileBannerUrl;
+					}
+
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						return;
+					}
+
+					break;
+
+				case "ImageUrl":
+
+					try
+					{
+						result = token.Users.Show(id).ProfileImageUrl;
+					}
+
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						return;
+					}
+
+					break;
+
+				case "ImageUrlHttps":
+
+					try
+					{
+						result = token.Users.Show(id).ProfileImageUrlHttps;
+					}
+
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						return;
+					}
+
+					break;
 			}
 
-			catch (Exception ex)
-			{
-				MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
-				return;
-			}
-
-			if (item == "name")
-			{
-				String name;
-
-				try
-				{
-					name = token.Users.Show(id).Name;
-				}
-
-				catch (Exception ex)
-				{
-					MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
-					return;
-				}
-
-				richTextBox1.AppendText("\n@" + id + "'s Name: " + name);
-			}
-
-			else if (item == "follow")
-			{
-				int follow;
-
-				try
-				{
-					follow = token.Users.Show(id).FriendsCount;
-				}
-
-				catch (Exception ex)
-				{
-					MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
-					return;
-				}
-
-				richTextBox1.AppendText("\n@" + id + "'s Follow: " + follow);
-			}
-
-			else if (item == "follower")
-			{
-				int follower;
-
-				try
-				{
-					follower = token.Users.Show(id).FollowersCount;
-				}
-
-				catch (Exception ex)
-				{
-					MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
-					return;
-				}
-
-				richTextBox1.AppendText("\n@" + id + "'s Follower: " + follower);
-			}
-
-			else if (item == "description")
-			{
-				String description;
-
-				try
-				{
-					description = token.Users.Show(id).Description;
-				}
-
-				catch (Exception ex)
-				{
-					MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
-					return;
-				}
-
-				richTextBox1.AppendText("\n@" + id + "'s Description: " + description);
-			}
-
-			else if (item == "id")
-			{
-				long id_number;
-
-				try
-				{
-					id_number = token.Users.Show(id).Id.Value;
-				}
-
-				catch (Exception ex)
-				{
-					MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
-					return;
-				}
-
-				richTextBox1.AppendText("\n@" + id + "'s ID: " + id_number);
-			}
-
-			else if (item == "timezone")
-			{
-				String timezone;
-
-				try
-				{
-					timezone = token.Users.Show(id).TimeZone;
-				}
-
-				catch (Exception ex)
-				{
-					MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
-					return;
-				}
-
-				richTextBox1.AppendText("\n@" + id + "'s TimeZone: " + timezone);
-			}
-
-			else if (item == "created")
-			{
-				String created;
-
-				try
-				{
-					created = token.Users.Show(id).CreatedAt.ToUniversalTime().ToString();
-				}
-
-				catch (Exception ex)
-				{
-					MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
-					return;
-				}
-
-				richTextBox1.AppendText("\n@" + id + "'s Created: " + created);
-			}
-
-			else if (item == "favorite")
-			{
-				int fav = 0;
-
-				try
-				{
-					fav = token.Users.Show(id).FavouritesCount;
-				}
-
-				catch (Exception ex)
-				{
-					MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
-					return;
-				}
-
-				richTextBox1.AppendText("\n@" + id + "'s Favorite: " + fav);
-			}
-
-			else if (item == "tweet")
-			{
-				int tweet;
-
-				try
-				{
-					tweet = token.Users.Show(id).StatusesCount;
-				}
-
-				catch (Exception ex)
-				{
-					MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
-					return;
-				}
-
-				richTextBox1.AppendText("\n@" + id + "'s Tweet: " + tweet);
-			}
-
-			else if (item == "language")
-			{
-				String language;
-
-				try
-				{
-					language = token.Users.Show(id).Language;
-				}
-
-				catch (Exception ex)
-				{
-					MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
-					return;
-				}
-
-				richTextBox1.AppendText("\n@" + id + "'s Language: " + language);
-			}
-
-			else if (item == "listed")
-			{
-				int listed;
-
-				try
-				{
-					listed = token.Users.Show(id).ListedCount.Value;
-				}
-
-				catch (Exception ex)
-				{
-					MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
-					return;
-				}
-
-				richTextBox1.AppendText("\n@" + id + "'s Listed: " + listed);
-			}
-
-			else if (item == "location")
-			{
-				String loc;
-
-				try
-				{
-					loc = token.Users.Show(id).Location;
-				}
-
-				catch (Exception ex)
-				{
-					MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
-					return;
-				}
-
-				richTextBox1.AppendText("\n@" + id + "'s Location: " + loc);
-			}
-
-			else if (item == "url")
-			{
-				String url;
-
-				try
-				{
-					url = token.Users.Show(id).Url;
-				}
-
-				catch (Exception ex)
-				{
-					MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
-					return;
-				}
-
-				richTextBox1.AppendText("\n@" + id + "'s URL: " + url);
-			}
+			Result();
 		}
 
 		private void Form1_Load(object sender, EventArgs e)
@@ -375,11 +449,12 @@ namespace Twinfo
 
 			if (AccessToken != "" && AccessTokenSecret != "")
 			{
-				Tokens t = Tokens.Create(ConsumerKey, ConsumerSecret, AccessToken, AccessTokenSecret, UserID, ScreenName);
+				if (UserID != 0 && ScreenName != "")
+				{
+					token = Tokens.Create(ConsumerKey, ConsumerSecret, AccessToken, AccessTokenSecret, UserID, ScreenName);
 
-				token = t;
-
-				richTextBox1.AppendText("\nアカウントの認証に成功しました！");
+					richTextBox1.AppendText("\nアカウントの認証に成功しました！");
+				}
 			}
 
 			else
@@ -392,7 +467,7 @@ namespace Twinfo
 
 		private void webBrowser1_Navigated(object sender, WebBrowserNavigatedEventArgs e)
 		{
-			//URLからクエリを取得
+			//URLからクエリ取得
 			try
 			{
 				query = e.Url.Query;
@@ -407,11 +482,12 @@ namespace Twinfo
 			Auth();
 		}
 
+		//認証ボタン
 		private void button1_Click(object sender, EventArgs e)
 		{
 			if (token != null)
 			{
-				DialogResult m1 = MessageBox.Show("認証はアカウントを変更するなどの際のみ必要です。\nアカウントを再認証しますか？", "質問", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+				var m1 = MessageBox.Show("再認証はアカウントを変更するなどの際のみ必要です。\nアカウントを再認証しますか？", "質問", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
 				if (m1 != DialogResult.Yes)
 				{
@@ -433,23 +509,27 @@ namespace Twinfo
 			}
 		}
 
+		//OKボタン
 		private void button2_Click(object sender, EventArgs e)
 		{
 			OK();
 		}
 
+		//初期化ボタン
 		private void button3_Click(object sender, EventArgs e)
 		{
-			DialogResult m1 = MessageBox.Show("全ての設定を初期化して再起動します。\nよろしいですか？", "質問", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+			var m1 = MessageBox.Show("全ての設定を初期化して再起動します。\nよろしいですか？", "質問", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
 			if (m1 == DialogResult.Yes)
 			{
 				Properties.Settings.Default.Reload();
 				Properties.Settings.Default.Reset();
+
 				System.Windows.Forms.Application.Restart();
 			}
 		}
 
+		//クリアボタン
 		private void button4_Click(object sender, EventArgs e)
 		{
 			richTextBox1.Clear();
@@ -465,9 +545,16 @@ namespace Twinfo
 
 		private void richTextBox1_LinkClicked(object sender, LinkClickedEventArgs e)
 		{
-			Uri url = new Uri(e.LinkText);
+			var url = new Uri(e.LinkText);
 
 			webBrowser1.Url = url;
+		}
+
+		private void richTextBox1_TextChanged(object sender, EventArgs e)
+		{
+			richTextBox1.SelectionStart = richTextBox1.Text.Length;
+			richTextBox1.Focus();
+			richTextBox1.ScrollToCaret();
 		}
 	}
 }

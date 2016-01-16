@@ -74,6 +74,7 @@
 			this.richTextBox1.TabIndex = 2;
 			this.richTextBox1.Text = "";
 			this.richTextBox1.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.richTextBox1_LinkClicked);
+			this.richTextBox1.TextChanged += new System.EventHandler(this.richTextBox1_TextChanged);
 			// 
 			// label1
 			// 
@@ -113,21 +114,28 @@
 			// comboBox1
 			// 
 			this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.comboBox1.FormattingEnabled = true;
 			this.comboBox1.Items.AddRange(new object[] {
-            "created",
-            "description",
-            "favorite",
-            "follow",
-            "follower",
-            "id",
-            "language",
-            "listed",
-            "location",
-            "name",
-            "timezone",
-            "tweet",
-            "url"});
+            "BackgroundColor",
+            "BackgroundImageUrl",
+            "BackgroundImageUrlHttps",
+            "BannerUrl",
+            "Created",
+            "Description",
+            "Favorite",
+            "Follow",
+            "Follower",
+            "ID",
+            "ImageUrl",
+            "ImageUrlHttps",
+            "Language",
+            "Listed",
+            "Location",
+            "Name",
+            "TimeZone",
+            "Tweet",
+            "URL"});
 			this.comboBox1.Location = new System.Drawing.Point(12, 75);
 			this.comboBox1.Name = "comboBox1";
 			this.comboBox1.Size = new System.Drawing.Size(158, 20);
