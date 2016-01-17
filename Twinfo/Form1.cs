@@ -44,7 +44,7 @@ namespace Twinfo
 			InitializeComponent();
 		}
 
-		public void Result()
+		private void Result()
 		{
 			if (item == "BackgroundColor")
 			{
@@ -64,7 +64,7 @@ namespace Twinfo
 				richTextBox1.ForeColor = xcolor;
 			}
 
-			richTextBox1.AppendText("\n\n@" + id + "'s " + item + ":\n" + result);
+			richTextBox1.AppendText("\n\n@" + id + "'s " + item + ":\n>>>" + result);
 		}
 
 		//認証
@@ -74,7 +74,7 @@ namespace Twinfo
 
 			var url = webBrowser1.Url.ToString();
 
-			/*TODO: ここガバガバ*/
+			/*TODO: ここガバみある*/
 			if (url.Contains("oauth_token") && url.Contains("oauth_verifier"))
 			{
 				if (url.Contains("civn.blog.jp/callback/"))
@@ -88,8 +88,9 @@ namespace Twinfo
 						oauth_token = query.Substring(13, 27);
 					}
 
-					catch
+					catch (Exception ex)
 					{
+						MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
 						return;
 					}
 
@@ -98,8 +99,9 @@ namespace Twinfo
 						oauth_verifier = query.Substring(56);
 					}
 
-					catch
+					catch (Exception ex)
 					{
+						MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
 						return;
 					}
 
@@ -126,7 +128,17 @@ namespace Twinfo
 					richTextBox1.AppendText("\nアカウントの認証に成功しました！");
 					richTextBox1.AppendText("\nID: @" + token.ScreenName);
 
-					token.Statuses.Update("#UsingTwinfo");
+					try
+					{
+						token.Statuses.Update("#UsingTwinfo");
+					}
+
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						return;
+					}
+
 				}
 			}
 		}
@@ -142,6 +154,7 @@ namespace Twinfo
 				return;
 			}
 
+			//テキストボックス空欄だったらYOU
 			if (textBox1.Text == "")
 			{
 				id = token.ScreenName;
@@ -152,6 +165,7 @@ namespace Twinfo
 				id = textBox1.Text;
 			}
 
+			//I have 改善の余地
 			switch (item)
 			{
 				case "Name":
@@ -184,7 +198,7 @@ namespace Twinfo
 
 					break;
 
-				case "Follower":
+				case "Followers":
 
 					try
 					{
@@ -244,7 +258,7 @@ namespace Twinfo
 
 					break;
 
-				case "Created":
+				case "CreatedAt":
 
 					try
 					{
@@ -259,26 +273,11 @@ namespace Twinfo
 
 					break;
 
-				case "Favorite":
+				case "Favourites":
 
 					try
 					{
 						result = token.Users.Show(id).FavouritesCount.ToString();
-					}
-
-					catch (Exception ex)
-					{
-						MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
-						return;
-					}
-
-					break;
-
-				case "Tweet":
-
-					try
-					{
-						result = token.Users.Show(id).StatusesCount.ToString();
 					}
 
 					catch (Exception ex)
@@ -349,7 +348,307 @@ namespace Twinfo
 
 					break;
 
-				case "BackgroundColor":
+				case "IsContributorsEnabled":
+
+					try
+					{
+						result = token.Users.Show(id).IsContributorsEnabled.ToString();
+					}
+
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						return;
+					}
+
+					break;
+
+				case "IsDefaultProfile":
+
+					try
+					{
+						result = token.Users.Show(id).IsDefaultProfile.ToString();
+					}
+
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						return;
+					}
+
+					break;
+
+				case "IsDefaultProfileImage":
+
+					try
+					{
+						result = token.Users.Show(id).IsDefaultProfileImage.ToString();
+					}
+
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						return;
+					}
+
+					break;
+
+				case "IsFollowRequestSent":
+
+					try
+					{
+						result = token.Users.Show(id).IsFollowRequestSent.ToString();
+					}
+
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						return;
+					}
+
+					break;
+
+				case "IsGeoEnabled":
+
+					try
+					{
+						result = token.Users.Show(id).IsGeoEnabled.ToString();
+					}
+
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						return;
+					}
+
+					break;
+
+				case "IsMuting":
+
+					try
+					{
+						result = token.Users.Show(id).IsMuting.ToString();
+					}
+
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						return;
+					}
+
+					break;
+
+				case "IsProfileBackgroundTile":
+
+					try
+					{
+						result = token.Users.Show(id).IsProfileBackgroundTile.ToString();
+					}
+
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						return;
+					}
+
+					break;
+
+				case "IsProfileUseBackgroundImage":
+
+					try
+					{
+						result = token.Users.Show(id).IsProfileUseBackgroundImage.ToString();
+					}
+
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						return;
+					}
+
+					break;
+
+				case "IsProtected":
+
+					try
+					{
+						result = token.Users.Show(id).IsProtected.ToString();
+					}
+
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						return;
+					}
+
+					break;
+
+				case "IsShowAllInlineMedia":
+
+					try
+					{
+						result = token.Users.Show(id).IsShowAllInlineMedia.ToString();
+					}
+
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						return;
+					}
+
+					break;
+
+				case "IsSuspended":
+
+					try
+					{
+						result = token.Users.Show(id).IsSuspended.ToString();
+					}
+
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						return;
+					}
+
+					break;
+
+				case "IsTranslationEnabled":
+
+					try
+					{
+						result = token.Users.Show(id).IsTranslationEnabled.ToString();
+					}
+
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						return;
+					}
+
+					break;
+
+				case "IsTranslator":
+
+					try
+					{
+						result = token.Users.Show(id).IsTranslator.ToString();
+					}
+
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						return;
+					}
+
+					break;
+
+				case "IsVerified":
+
+					try
+					{
+						result = token.Users.Show(id).IsVerified.ToString();
+					}
+
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						return;
+					}
+
+					break;
+
+				case "NeedsPhoneVerification":
+
+					try
+					{
+						result = token.Users.Show(id).NeedsPhoneVerification.ToString();
+					}
+
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						return;
+					}
+
+					break;
+
+				case "ProfileLinkColor":
+
+					try
+					{
+						result = token.Users.Show(id).ProfileLinkColor.ToString();
+					}
+
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						return;
+					}
+
+					break;
+
+				case "ProfileLocation":
+
+					try
+					{
+						result = token.Users.Show(id).ProfileLocation.ToString();
+					}
+
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						return;
+					}
+
+					break;
+
+				case "ProfileSidebarBorderColor":
+
+					try
+					{
+						result = token.Users.Show(id).ProfileSidebarBorderColor.ToString();
+					}
+
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						return;
+					}
+
+					break;
+
+				case "ProfileSidebarFillColor":
+
+					try
+					{
+						result = token.Users.Show(id).ProfileSidebarFillColor.ToString();
+					}
+
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						return;
+					}
+
+					break;
+
+				case "ProfileTextColor":
+
+					try
+					{
+						result = token.Users.Show(id).ProfileTextColor.ToString();
+					}
+
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						return;
+					}
+
+					break;
+
+				case "ProfileBackgroundColor":
 
 					try
 					{
@@ -364,7 +663,7 @@ namespace Twinfo
 
 					break;
 
-				case "BackgroundImageUrl":
+				case "ProfileBackgroundImageUrl":
 
 					try
 					{
@@ -379,7 +678,7 @@ namespace Twinfo
 
 					break;
 
-				case "BackgroundImageUrlHttps":
+				case "ProfileBackgroundImageUrlHttps":
 
 					try
 					{
@@ -394,7 +693,7 @@ namespace Twinfo
 
 					break;
 
-				case "BannerUrl":
+				case "ProfileBannerUrl":
 
 					try
 					{
@@ -409,7 +708,7 @@ namespace Twinfo
 
 					break;
 
-				case "ImageUrl":
+				case "ProfileImageUrl":
 
 					try
 					{
@@ -424,11 +723,71 @@ namespace Twinfo
 
 					break;
 
-				case "ImageUrlHttps":
+				case "ProfileImageUrlHttps":
 
 					try
 					{
 						result = token.Users.Show(id).ProfileImageUrlHttps;
+					}
+
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						return;
+					}
+
+					break;
+
+				case "Tweets":
+
+					try
+					{
+						result = token.Users.Show(id).StatusesCount.ToString();
+					}
+
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						return;
+					}
+
+					break;
+
+				case "UtcOffset":
+
+					try
+					{
+						result = token.Users.Show(id).UtcOffset.Value.ToString();
+					}
+
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						return;
+					}
+
+					break;
+
+				case "WithheldInCountries":
+
+					try
+					{
+						result = token.Users.Show(id).WithheldInCountries.ToString();
+					}
+
+					catch (Exception ex)
+					{
+						MessageBox.Show(ex.Message, "エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						return;
+					}
+
+					break;
+
+				case "WithheldScope":
+
+					try
+					{
+						result = token.Users.Show(id).WithheldScope.ToString();
 					}
 
 					catch (Exception ex)
@@ -447,6 +806,8 @@ namespace Twinfo
 		{
 			Properties.Settings.Default.Reload();
 
+			comboBox1.SelectedIndex = 0;
+
 			if (AccessToken != "" && AccessTokenSecret != "")
 			{
 				if (UserID != 0 && ScreenName != "")
@@ -461,8 +822,6 @@ namespace Twinfo
 			{
 				richTextBox1.AppendText("\nアカウントの認証をする必要があります！");
 			}
-
-			comboBox1.SelectedIndex = 0;
 		}
 
 		private void webBrowser1_Navigated(object sender, WebBrowserNavigatedEventArgs e)
@@ -552,8 +911,8 @@ namespace Twinfo
 
 		private void richTextBox1_TextChanged(object sender, EventArgs e)
 		{
-			richTextBox1.SelectionStart = richTextBox1.Text.Length;
-			richTextBox1.Focus();
+			richTextBox1.Update();
+			richTextBox1.Select(richTextBox1.TextLength, 0);
 			richTextBox1.ScrollToCaret();
 		}
 	}
